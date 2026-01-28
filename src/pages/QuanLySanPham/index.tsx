@@ -1,4 +1,11 @@
-import { Button, Input, Modal, Popconfirm, Space, Table, message } from 'antd';
+import {
+    Table,
+    Button,
+    Modal,
+    Popconfirm,
+    Space,
+    Input,
+} from 'antd';
 import { useModel } from 'umi';
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import FormProduct from './Form';
@@ -6,6 +13,7 @@ import { useMemo } from 'react';
 interface Product {
     id: number;
     name: string;
+    category: string;
     price: number;
     quantity: number;
 }
@@ -120,11 +128,13 @@ const QuanLySanPham: React.FC = () => {
                     setModalVisible(false);
                     setEditingProduct(undefined);
                 }}
-                destroyOnClose                     
+                destroyOnClose
             >
                 <FormProduct />
             </Modal>
         </div>
     );
-}
+};
+
+
 export default QuanLySanPham;

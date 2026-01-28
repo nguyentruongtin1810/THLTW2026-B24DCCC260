@@ -1,13 +1,22 @@
-import { Button, Form, Input, InputNumber, message } from 'antd';
+import { Button, Form, Input, InputNumber, Select, message } from 'antd';
 import { useModel } from 'umi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { getCategories } from '@/services/QuanLySanPham';
+
 const FormProduct = () => {
     const { editingProduct, addProduct, updateProduct, setModalVisible } = useModel('sanpham');
-    const [form] = Form.useForm();  
+    const [form] = Form.useForm();
+    const [categories, setCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        getCategories().then(setCategories);
+    }, []);
+
     useEffect(() => {
         if (editingProduct) {
             form.setFieldsValue({
                 name: editingProduct.name,
+                category: editingProduct.category,
                 price: editingProduct.price,
                 quantity: editingProduct.quantity,
             });
@@ -21,6 +30,7 @@ const FormProduct = () => {
                 updateProduct({
                     id: editingProduct.id,
                     name: values.name,
+                    category: values.category,
                     price: values.price,
                     quantity: values.quantity,
                 });
@@ -28,6 +38,7 @@ const FormProduct = () => {
             } else {
                 addProduct({
                     name: values.name,
+                    category: values.category,
                     price: values.price,
                     quantity: values.quantity,
                 });
@@ -52,6 +63,19 @@ const FormProduct = () => {
                 ]}
             >
                 <Input placeholder='Nhập tên sản phẩm' />
+            </Form.Item>
+
+            <Form.Item
+                label='Danh mục'
+                name='category'
+                rules={[
+                    { required: true, message: 'Vui lòng chọn danh mục!' },
+                ]}
+            >
+                <Select
+                    placeholder='Chọn danh mục'
+                    options={categories.map(cat => ({ label: cat, value: cat }))}
+                />
             </Form.Item>
 
             <Form.Item

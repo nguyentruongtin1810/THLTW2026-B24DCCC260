@@ -15,9 +15,7 @@
 			},
 		],
 	},
-
-	///////////////////////////////////
-	// DEFAULT MENU
+	
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
@@ -41,6 +39,12 @@
 		name: 'TodoList',
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
+	},
+	{
+		path: '/quan-ly-san-pham',
+		name: 'Quản lý Sản phẩm',
+		icon: 'ShoppingOutlined',
+		component: './QuanLySanPham',
 	},
 
 	// DANH MUC HE THONG
