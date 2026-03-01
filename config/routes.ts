@@ -41,6 +41,18 @@
 		component: './TodoList',
 	},
 	{
+		path: '/guess-number',
+		name: 'GuessNumber',
+		icon: 'PlayCircleOutlined',
+		component: './GuessNumber',
+	},
+	{
+		path: '/study-tracker',
+		name: 'Học tập',
+		icon: 'BookOutlined',
+		component: './StudyTracker',
+	},
+	{
 		path: '/quan-ly-san-pham',
 		name: 'Quản lý Sản phẩm',
 		icon: 'ShoppingOutlined',
