@@ -53,10 +53,43 @@
 		component: './StudyTracker',
 	},
 	{
+		path: '/rock-paper-scissors',
+		name: 'Oẳn Tù Tì',
+		icon: 'PlayCircleOutlined',
+		component: './RockPaperScissors',
+	},
+	{
 		path: '/quan-ly-san-pham',
 		name: 'Quản lý Sản phẩm',
 		icon: 'ShoppingOutlined',
 		component: './QuanLySanPham',
+	},
+	{
+		path: '/quan-ly-ngan-hang',
+		name: 'Quản Lý Ngân Hàng Câu Hỏi',
+		icon: 'BankOutlined',
+		routes: [
+			{
+				path: '/quan-ly-ngan-hang/khoi-kien-thuc',
+				name: 'Khối Kiến Thức',
+				component: './QuanLyNganHang/KhoiKienThuc',
+			},
+			{
+				path: '/quan-ly-ngan-hang/mon-hoc',
+				name: 'Môn Học',
+				component: './QuanLyNganHang/MonHoc',
+			},
+			{
+				path: '/quan-ly-ngan-hang/cau-hoi',
+				name: 'Câu Hỏi',
+				component: './QuanLyNganHang/CauHoi',
+			},
+			{
+				path: '/quan-ly-ngan-hang/quan-ly-de-thi',
+				name: 'Quản Lý Đề Thi',
+				component: './QuanLyNganHang/QuanLyDeThi',
+			},
+		],
 	},
 
 	// DANH MUC HE THONG
