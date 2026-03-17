@@ -1,5 +1,5 @@
 import axios from '@/utils/axios';
-import type { CauTrucDeThi, DeThi, TaoDeThiParams } from '@/models/QuanLyDeThi';
+import type { CauTrucDeThi, TaoDeThiParams } from '@/models/QuanLyDeThi';
 
 // Quản lý cấu trúc đề thi
 export async function getListCauTrucDeThi() {

@@ -7,7 +7,6 @@ import {
   updateCauTrucDeThi,
   deleteCauTrucDeThi,
   getListDeThi,
-  createDeThi,
   deleteDeThi,
   generateDeThiFromCauTruc
 } from '@/services/QuanLyDeThi';
@@ -365,6 +364,7 @@ const QuanLyDeThiPage: React.FC = () => {
             dataSource={yeuCauList}
             renderItem={(item, index) => (
               <List.Item
+                key={index}
                 actions={[
                   <Button type="link" danger onClick={() => removeYeuCau(index)}>
                     Xóa
