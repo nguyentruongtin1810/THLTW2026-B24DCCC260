@@ -83,6 +83,16 @@
 				name: 'Quản lý lịch hẹn',
 				component: './DatLichHen/QuanLyLichHen',
 			},
+			{
+				path: '/dat-lich-hen/danh-gia',
+				name: 'Đánh giá',
+				component: './DatLichHen/DanhGia',
+			},
+			{
+				path: '/dat-lich-hen/thong-ke',
+				name: 'Thống kê',
+				component: './DatLichHen/ThongKe',
+			},
 		],
 	},
 	{

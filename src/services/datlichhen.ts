@@ -1,4 +1,5 @@
-import type { NhanVien, DichVu, LichHen } from '@/models/datlichhen';
+import dayjs from 'dayjs';
+import type { NhanVien, DichVu, LichHen, DanhGia } from '@/models/datlichhen';
 const getInitialNhanViens = (): NhanVien[] => {
   const stored = localStorage.getItem('nhanViens');
   if (stored) {
@@ -19,6 +20,10 @@ const getInitialNhanViens = (): NhanVien[] => {
       },
     },
   ];
+};
+
+export const getNhanViens = (): NhanVien[] => {
+  return getInitialNhanViens();
 };
 
 const getInitialDichVus = (): DichVu[] => {
@@ -55,8 +60,17 @@ const getInitialLichHens = (): LichHen[] => {
   }
   return [];
 };
-export const getNhanViens = (): NhanVien[] => {
-  return getInitialNhanViens();
+
+const getInitialDanhGias = (): DanhGia[] => {
+  const stored = localStorage.getItem('danhGias');
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  return [];
+};
+
+export const getLichHens = (): LichHen[] => {
+  return getInitialLichHens();
 };
 
 export const getNhanVienById = (id: string): NhanVien | undefined => {
@@ -125,10 +139,6 @@ export const deleteDichVu = (id: string) => {
   localStorage.setItem('dichVus', JSON.stringify(dichVus));
   return true;
 };
-export const getLichHens = (): LichHen[] => {
-  return getInitialLichHens();
-};
-
 export const getLichHenById = (id: string): LichHen | undefined => {
   return getLichHens().find((lh) => lh.id === id);
 };
@@ -160,6 +170,65 @@ export const deleteLichHen = (id: string) => {
   localStorage.setItem('lichHens', JSON.stringify(lichHens));
   return true;
 };
+
+export const getDanhGias = (): DanhGia[] => {
+  return getInitialDanhGias();
+};
+
+export const getDanhGiaById = (id: string): DanhGia | undefined => {
+  return getDanhGias().find((dg) => dg.id === id);
+};
+
+export const addDanhGia = (data: Omit<DanhGia, 'id' | 'ngay'>) => {
+  const danhGias = getDanhGias();
+  const newDanhGia: DanhGia = {
+    ...data,
+    id: Date.now().toString(),
+    ngay: dayjs().format('YYYY-MM-DD'),
+  };
+  danhGias.push(newDanhGia);
+  localStorage.setItem('danhGias', JSON.stringify(danhGias));
+
+  // Link rating to appointment
+  updateLichHen(data.lichHenId, { danhGiaId: newDanhGia.id });
+
+  return newDanhGia;
+};
+
+export const updateDanhGia = (id: string, data: Partial<DanhGia>) => {
+  const danhGias = getDanhGias();
+  const index = danhGias.findIndex((dg) => dg.id === id);
+  if (index !== -1) {
+    danhGias[index] = { ...danhGias[index], ...data };
+    localStorage.setItem('danhGias', JSON.stringify(danhGias));
+    return danhGias[index];
+  }
+  return null;
+};
+
+export const deleteDanhGia = (id: string) => {
+  const danhGias = getDanhGias().filter((dg) => dg.id !== id);
+  localStorage.setItem('danhGias', JSON.stringify(danhGias));
+  return true;
+};
+
+export const getDanhGiasByNhanVien = (nhanVienId: string): DanhGia[] => {
+  return getDanhGias().filter((dg) => dg.nhanVienId === nhanVienId);
+};
+
+export const getAverageRatingForNhanVien = (nhanVienId: string): number => {
+  const ratings = getDanhGiasByNhanVien(nhanVienId);
+  if (!ratings.length) return 0;
+  const sum = ratings.reduce((acc, rg) => acc + rg.soSao, 0);
+  return parseFloat((sum / ratings.length).toFixed(1));
+};
+
+export const getRatingsByLichHenId = (lichHenId: string): DanhGia | undefined => {
+  const lichHen = getLichHenById(lichHenId);
+  if (!lichHen?.danhGiaId) return undefined;
+  return getDanhGiaById(lichHen.danhGiaId);
+};
+
 export const timeOverlap = (
   start1: string,
   end1: string,
@@ -270,4 +339,52 @@ export const hasCapacityOnDay = (ngay: string, nhanVienId: string): boolean => {
 
   const count = countAppointmentsForStaffOnDay(ngay, nhanVienId);
   return count < nhanVien.gioiHanKhachNgay;
+};
+
+export const getAppointmentsCountByDay = (month: string) => {
+  // month format: YYYY-MM
+  const counts: Record<string, number> = {};
+  getLichHens()
+    .filter((lh) => lh.trangThai !== 'huy' && lh.ngay.startsWith(month))
+    .forEach((lh) => {
+      counts[lh.ngay] = (counts[lh.ngay] || 0) + 1;
+    });
+  return Object.entries(counts)
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+};
+
+export const getRevenueByService = (month: string) => {
+  const revenueMap: Record<string, { ten: string; revenue: number; count: number }> = {};
+  const services = getDichVus();
+  getLichHens()
+    .filter((lh) => lh.trangThai === 'hoanThanh' && lh.ngay.startsWith(month))
+    .forEach((lh) => {
+      const dv = services.find((d) => d.id === lh.dichVuId);
+      if (!dv) return;
+      if (!revenueMap[dv.id]) {
+        revenueMap[dv.id] = { ten: dv.ten, revenue: 0, count: 0 };
+      }
+      revenueMap[dv.id].revenue += dv.gia;
+      revenueMap[dv.id].count += 1;
+    });
+  return Object.entries(revenueMap).map(([id, value]) => ({ id, ...value }));
+};
+
+export const getRevenueByNhanVien = (month: string) => {
+  const revenueMap: Record<string, { ten: string; revenue: number; count: number }> = {};
+  const staffs = getNhanViens();
+  getLichHens()
+    .filter((lh) => lh.trangThai === 'hoanThanh' && lh.ngay.startsWith(month))
+    .forEach((lh) => {
+      const nv = staffs.find((n) => n.id === lh.nhanVienId);
+      const dv = getDichVuById(lh.dichVuId);
+      if (!nv || !dv) return;
+      if (!revenueMap[nv.id]) {
+        revenueMap[nv.id] = { ten: nv.ten, revenue: 0, count: 0 };
+      }
+      revenueMap[nv.id].revenue += dv.gia;
+      revenueMap[nv.id].count += 1;
+    });
+  return Object.entries(revenueMap).map(([id, value]) => ({ id, ...value }));
 };

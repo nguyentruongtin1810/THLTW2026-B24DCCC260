@@ -16,6 +16,7 @@ import {
   Alert,
   Divider,
   Popconfirm,
+  Rate,
 } from 'antd';
 import {
   DeleteOutlined,
@@ -25,7 +26,7 @@ import {
   CloseCircleOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import type { LichHen, NhanVien, DichVu } from '@/models/datlichhen';
+import type { LichHen, NhanVien, DichVu, DanhGia } from '@/models/datlichhen';
 import {
   getLichHens,
   updateLichHen,
@@ -35,6 +36,9 @@ import {
   getNhanVienById,
   getDichVuById,
   checkScheduleConflict,
+  getRatingsByLichHenId,
+  addDanhGia,
+  updateDanhGia,
 } from '@/services/datlichhen';
 
 const QuanLyLichHen: React.FC = () => {
@@ -45,6 +49,10 @@ const QuanLyLichHen: React.FC = () => {
   const [editingLichHen, setEditingLichHen] = useState<LichHen | null>(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedLichHen, setSelectedLichHen] = useState<LichHen | null>(null);
+  const [selectedRating, setSelectedRating] = useState<DanhGia | null>(null);
+  const [ratingValue, setRatingValue] = useState<number>(0);
+  const [ratingComment, setRatingComment] = useState<string>('');
+  const [replyText, setReplyText] = useState<string>('');
   const [conflictWarning, setConflictWarning] = useState<LichHen[]>([]);
   const [form] = Form.useForm();
   const [filterStatus, setFilterStatus] = useState<string>('');
@@ -79,6 +87,21 @@ const QuanLyLichHen: React.FC = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (selectedLichHen) {
+      const rating = getRatingsByLichHenId(selectedLichHen.id);
+      setSelectedRating(rating || null);
+      setRatingValue(rating?.soSao || 0);
+      setRatingComment(rating?.binhLuan || '');
+      setReplyText(rating?.phanHoi || '');
+    } else {
+      setSelectedRating(null);
+      setRatingValue(0);
+      setRatingComment('');
+      setReplyText('');
+    }
+  }, [selectedLichHen]);
 
   const handleViewDetail = (record: LichHen) => {
     setSelectedLichHen(record);
@@ -178,6 +201,43 @@ const QuanLyLichHen: React.FC = () => {
       message.success(`Cập nhật trạng thái thành "${statusName[newStatus]}" thành công`);
     }
   };
+
+  const handleSubmitRating = () => {
+    if (!selectedLichHen) return;
+    if (ratingValue < 1) {
+      message.error('Vui lòng chọn số sao (tối thiểu 1 sao)');
+      return;
+    }
+
+    const newRating = addDanhGia({
+      lichHenId: selectedLichHen.id,
+      nhanVienId: selectedLichHen.nhanVienId,
+      soSao: ratingValue,
+      binhLuan: ratingComment,
+    });
+
+    setSelectedRating(newRating);
+    setLichHens(getLichHens());
+    message.success('Cảm ơn bạn đã đánh giá!');
+  };
+
+  const handleSubmitReply = () => {
+    if (!selectedRating || !selectedLichHen) return;
+    if (!replyText.trim()) {
+      message.error('Vui lòng nhập phản hồi');
+      return;
+    }
+
+    updateDanhGia(selectedRating.id, {
+      phanHoi: replyText,
+      ngayPhanHoi: dayjs().format('YYYY-MM-DD'),
+    });
+
+    const updated = getRatingsByLichHenId(selectedLichHen.id);
+    setSelectedRating(updated || null);
+    message.success('Phản hồi đã được gửi');
+  };
+
 
   const handleOk = () => {
     form.validateFields().then((values) => {
@@ -445,6 +505,59 @@ const QuanLyLichHen: React.FC = () => {
                       <div>Trạng thái: <Tag color={getStatusColor(c.trangThai)}>{getStatusLabel(c.trangThai)}</Tag></div>
                     </div>
                   ))}
+                </div>
+              </>
+            )}
+
+            {selectedLichHen?.trangThai === 'hoanThanh' && (
+              <>
+                <Divider />
+                <div style={{ marginTop: 16 }}>
+                  <h3>Đánh giá</h3>
+                  {selectedRating ? (
+                    <div style={{ backgroundColor: '#fafafa', padding: 12, borderRadius: 4 }}>
+                      <Rate disabled value={selectedRating.soSao} />
+                      <div style={{ marginTop: 8 }}>{selectedRating.binhLuan || 'Không có bình luận'}</div>
+                      <div style={{ marginTop: 8, fontSize: 12, color: '#888' }}>
+                        Ngày đánh giá: {selectedRating.ngay}
+                      </div>
+                      {selectedRating.phanHoi ? (
+                        <div style={{ marginTop: 12, padding: 8, backgroundColor: '#fff', borderRadius: 4 }}>
+                          <strong>Phản hồi:</strong>
+                          <div>{selectedRating.phanHoi}</div>
+                          <div style={{ marginTop: 4, fontSize: 12, color: '#888' }}>
+                            Ngày phản hồi: {selectedRating.ngayPhanHoi}
+                          </div>
+                        </div>
+                      ) : (
+                        <div style={{ marginTop: 12 }}>
+                          <Input.TextArea
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
+                            rows={3}
+                            placeholder="Nhập phản hồi của nhân viên..."
+                          />
+                          <Button type="primary" onClick={handleSubmitReply} style={{ marginTop: 8 }}>
+                            Phản hồi
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div style={{ backgroundColor: '#fafafa', padding: 12, borderRadius: 4 }}>
+                      <Rate value={ratingValue} onChange={setRatingValue} />
+                      <Input.TextArea
+                        value={ratingComment}
+                        onChange={(e) => setRatingComment(e.target.value)}
+                        rows={3}
+                        placeholder="Viết đánh giá (tùy chọn)..."
+                        style={{ marginTop: 12 }}
+                      />
+                      <Button type="primary" onClick={handleSubmitRating} style={{ marginTop: 12 }}>
+                        Gửi đánh giá
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </>
             )}

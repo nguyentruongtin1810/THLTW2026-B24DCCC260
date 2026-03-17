@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, InputNumber, message, Table, Row, Col, Space, Popconfirm } from 'antd';
+import { Button, Modal, Form, Input, InputNumber, message, Table, Row, Col, Space, Popconfirm, Rate, Tooltip } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { NhanVien } from '@/models/datlichhen';
-import { addNhanVien, updateNhanVien, deleteNhanVien, getNhanViens } from '@/services/datlichhen';
+import { addNhanVien, updateNhanVien, deleteNhanVien, getNhanViens, getAverageRatingForNhanVien, getDanhGiasByNhanVien } from '@/services/datlichhen';
 
 const QuanLyNhanVien: React.FC = () => {
   const [nhanViens, setNhanViens] = useState<NhanVien[]>(getNhanViens());
@@ -82,6 +82,23 @@ const QuanLyNhanVien: React.FC = () => {
       dataIndex: 'gioiHanKhachNgay',
       key: 'gioiHanKhachNgay',
       align: 'center' as const,
+    },
+    {
+      title: 'Đánh giá',
+      key: 'danhGia',
+      align: 'center' as const,
+      render: (_: any, record: NhanVien) => {
+        const avg = getAverageRatingForNhanVien(record.id);
+        const total = getDanhGiasByNhanVien(record.id).length;
+        return (
+          <Tooltip title={`${total} đánh giá`}>
+            <span>
+              <Rate allowHalf disabled value={avg} />
+              <span style={{ marginLeft: 4 }}>{total > 0 ? avg : '-'}</span>
+            </span>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'Lịch làm việc',
