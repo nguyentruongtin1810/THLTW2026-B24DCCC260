@@ -3,7 +3,7 @@ import { Tabs, Layout } from 'antd';
 import {
     DashboardOutlined,
     ShoppingOutlined,
-    ShoppingCartOutlined,
+    FileTextOutlined,
 } from '@ant-design/icons';
 import Dashboard from '@/components/Dashboard';
 import QuanLySanPham from '@/pages/QuanLySanPham';
@@ -13,39 +13,6 @@ const { Header, Content, Footer } = Layout;
 
 const TrangChu: React.FC = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
-
-    const items = [
-        {
-            key: 'dashboard',
-            label: (
-                <span>
-                    <DashboardOutlined />
-                    Dashboard
-                </span>
-            ),
-            children: <Dashboard />,
-        },
-        {
-            key: 'products',
-            label: (
-                <span>
-                    <ShoppingOutlined />
-                    Quản lý Sản phẩm
-                </span>
-            ),
-            children: <QuanLySanPham />,
-        },
-        {
-            key: 'orders',
-            label: (
-                <span>
-                    <ShoppingCartOutlined />
-                    Quản lý Đơn hàng
-                </span>
-            ),
-            children: <QuanLyDonHang />,
-        },
-    ];
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -68,13 +35,46 @@ const TrangChu: React.FC = () => {
                 <Tabs
                     activeKey={activeTab}
                     onChange={setActiveTab}
-                    items={items}
                     type="card"
                     style={{
                         background: 'white',
                         borderRadius: '4px',
                     }}
-                />
+                >
+                    <Tabs.TabPane
+                        tab={
+                            <span>
+                                <DashboardOutlined />
+                                Dashboard
+                            </span>
+                        }
+                        key="dashboard"
+                    >
+                        <Dashboard />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane
+                        tab={
+                            <span>
+                                <ShoppingOutlined />
+                                Quản lý Sản phẩm
+                            </span>
+                        }
+                        key="products"
+                    >
+                        <QuanLySanPham />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane
+                        tab={
+                            <span>
+                                <FileTextOutlined />
+                                Quản lý Đơn hàng
+                            </span>
+                        }
+                        key="orders"
+                    >
+                        <QuanLyDonHang />
+                    </Tabs.TabPane>
+                </Tabs>
             </Content>
 
             <Footer style={{ textAlign: 'center', backgroundColor: '#f0f2f5' }}>

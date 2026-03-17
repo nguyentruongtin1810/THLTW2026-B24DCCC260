@@ -1,5 +1,5 @@
 import type { IColumn } from '@/components/Table/typing';
-import { Button, Form, Input, Modal, Select, Table } from 'antd';
+import { Button, Form, Input, Modal, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import queryString from 'query-string';
@@ -40,14 +40,14 @@ const RandomUser = () => {
 	const columns: IColumn<RandomUser.Record>[] = [
 		{
 			title: 'Address',
-			dataIndex: 'name',
-			key: 'name',
+			dataIndex: 'address',
+			key: 'address',
 			width: 200,
 		},
 		{
 			title: 'Balance',
-			dataIndex: 'url',
-			key: 'age',
+			dataIndex: 'balance',
+			key: 'balance',
 			width: 100,
 		},
 		{
@@ -97,8 +97,8 @@ const RandomUser = () => {
 			</Button>
 			<Table
 				onChange={(pagination) => {
-					setPageSize(pagination.pageSize);
-					setCurrent(pagination.current);
+					setPageSize(pagination.pageSize || 10);
+					setCurrent(pagination.current || 1);
 				}}
 				pagination={{ total, pageSize, current }}
 				dataSource={data2}

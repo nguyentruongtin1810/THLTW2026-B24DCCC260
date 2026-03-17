@@ -59,6 +59,43 @@
 		component: './RockPaperScissors',
 	},
 	{
+		path: '/dat-lich-hen',
+		name: 'Đặt lịch hẹn',
+		icon: 'CalendarOutlined',
+		routes: [
+			{
+				path: '/dat-lich-hen/quan-ly-nhan-vien',
+				name: 'Quản lý nhân viên',
+				component: './DatLichHen/QuanLyNhanVien',
+			},
+			{
+				path: '/dat-lich-hen/quan-ly-dich-vu',
+				name: 'Quản lý dịch vụ',
+				component: './DatLichHen/QuanLyDichVu',
+			},
+			{
+				path: '/dat-lich-hen/dat-lich',
+				name: 'Đặt lịch hẹn',
+				component: './DatLichHen/DatLichHen',
+			},
+			{
+				path: '/dat-lich-hen/quan-ly-lich-hen',
+				name: 'Quản lý lịch hẹn',
+				component: './DatLichHen/QuanLyLichHen',
+			},
+			{
+				path: '/dat-lich-hen/danh-gia',
+				name: 'Đánh giá',
+				component: './DatLichHen/DanhGia',
+			},
+			{
+				path: '/dat-lich-hen/thong-ke',
+				name: 'Thống kê',
+				component: './DatLichHen/ThongKe',
+			},
+		],
+	},
+	{
 		path: '/quan-ly-san-pham',
 		name: 'Quản lý Sản phẩm',
 		icon: 'ShoppingOutlined',
