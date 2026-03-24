@@ -102,6 +102,12 @@
 		component: './QuanLySanPham',
 	},
 	{
+		path: '/quan-ly-van-bang',
+		name: 'Quản lý Văn bằng',
+		icon: 'SolutionOutlined',
+		component: './QuanLyVanBang',
+	},
+	{
 		path: '/quan-ly-ngan-hang',
 		name: 'Quản Lý Ngân Hàng Câu Hỏi',
 		icon: 'BankOutlined',
