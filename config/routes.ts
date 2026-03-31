@@ -135,6 +135,13 @@
 		],
 	},
 
+	{
+		path: '/quan-ly-cau-lac-bo',
+		name: 'Quản lý Câu lạc bộ',
+		icon: 'TeamOutlined',
+		component: './QuanLyCauLacBo',
+	},
+
 	// DANH MUC HE THONG
 	// {
 	// 	name: 'DanhMuc',
