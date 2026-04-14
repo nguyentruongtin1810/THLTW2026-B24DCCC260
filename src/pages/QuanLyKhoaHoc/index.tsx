@@ -201,10 +201,7 @@ const QuanLyKhoaHoc: React.FC = () => {
                     </Button>
                     <Popconfirm
                         title="Bạn có chắc chắn muốn xóa khóa học này?"
-                        description={record.studentCount > 0 ? 'Khóa học này đã có học viên, không thể xóa!' : 'Hành động này không thể hoàn tác'}
                         onConfirm={() => handleDelete(record.id)}
-                        okText="Có"
-                        cancelText="Không"
                     >
                         <Button 
                             type="primary" 
@@ -290,7 +287,7 @@ const QuanLyKhoaHoc: React.FC = () => {
 
             <Modal
                 title={editingCourse ? 'Cập nhật khóa học' : 'Thêm khóa học mới'}
-                open={modalVisible}
+                visible={modalVisible}
                 footer={null}
                 onCancel={() => {
                     setModalVisible(false);
