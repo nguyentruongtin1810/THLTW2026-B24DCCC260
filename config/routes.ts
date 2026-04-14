@@ -102,6 +102,12 @@
 		component: './QuanLySanPham',
 	},
 	{
+		path: '/quan-ly-khoa-hoc',
+		name: 'Quản lý Khóa học',
+		icon: 'BookOutlined',
+		component: './QuanLyKhoaHoc',
+	},
+	{
 		path: '/quan-ly-van-bang',
 		name: 'Quản lý Văn bằng',
 		icon: 'SolutionOutlined',
@@ -140,6 +146,12 @@
 		name: 'Quản lý Câu lạc bộ',
 		icon: 'TeamOutlined',
 		component: './QuanLyCauLacBo',
+	},
+	{
+		path: '/ke-hoach-du-lich',
+		name: 'Kế hoạch du lịch',
+		icon: 'CompassOutlined',
+		component: './KeHoachDuLich',
 	},
 
 	// DANH MUC HE THONG
