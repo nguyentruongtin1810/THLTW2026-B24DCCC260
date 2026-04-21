@@ -1,0 +1,28 @@
+.managePosts {
+  padding: 24px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .toolbar {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    :global(.ant-space) {
+      flex-wrap: wrap;
+    }
+  }
+
+  .title {
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

@@ -167,6 +167,8 @@ const DESTINATIONS: Destination[] = [
     },
   },
 ];
+// TH06
+
 
 const DEFAULT_BUDGET: BudgetLimits = {
   food: 1100000,

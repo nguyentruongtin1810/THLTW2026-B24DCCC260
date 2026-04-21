@@ -153,6 +153,39 @@
 		icon: 'CompassOutlined',
 		component: './KeHoachDuLich',
 	},
+	{
+		path: '/blog',
+		name: 'Blog',
+		icon: 'FileTextOutlined',
+		routes: [
+			{
+				path: '/blog',
+				name: 'Trang chủ',
+				component: './Blog/home',
+			},
+			{
+				path: '/blog/post/:slug',
+				name: 'Chi tiết bài viết',
+				component: './Blog/PostDetail',
+				hideInMenu: true,
+			},
+			{
+				path: '/blog/about',
+				name: 'Giới thiệu',
+				component: './Blog/About',
+			},
+			{
+				path: '/blog/manage-posts',
+				name: 'Quản lý bài viết',
+				component: './Blog/ManagePosts',
+			},
+			{
+				path: '/blog/manage-tags',
+				name: 'Quản lý thẻ',
+				component: './Blog/ManageTags',
+			},
+		],
+	},
 
 	// DANH MUC HE THONG
 	// {
