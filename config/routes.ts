@@ -59,6 +59,38 @@
 		component: './RockPaperScissors',
 	},
 	{
+		path: '/fitness',
+		name: 'Thể dục & Sức khỏe',
+		icon: 'HeartOutlined',
+		routes: [
+			{
+				path: '/fitness/dashboard',
+				name: 'Dashboard',
+				component: './FitnessDashboard',
+			},
+			{
+				path: '/fitness/workout-log',
+				name: 'Nhật ký tập luyện',
+				component: './WorkoutLog',
+			},
+			{
+				path: '/fitness/health-log',
+				name: 'Nhật ký chỉ số',
+				component: './HealthLog',
+			},
+			{
+				path: '/fitness/goals',
+				name: 'Mục tiêu',
+				component: './Goals',
+			},
+			{
+				path: '/fitness/exercise-library',
+				name: 'Thư viện bài tập',
+				component: './ExerciseLibrary',
+			},
+		],
+	},
+	{
 		path: '/dat-lich-hen',
 		name: 'Đặt lịch hẹn',
 		icon: 'CalendarOutlined',
