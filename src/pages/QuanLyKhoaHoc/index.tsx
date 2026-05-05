@@ -21,8 +21,6 @@ interface Course {
     description: string;
 }
 
-const INSTRUCTORS = ['Thầy A', 'Thầy B', 'Thầy C', 'Thầy D', 'Thầy E'];
-
 const INITIAL_COURSES: Course[] = [
     { 
         id: 1, 
@@ -200,14 +198,13 @@ const QuanLyKhoaHoc: React.FC = () => {
                         Sửa
                     </Button>
                     <Popconfirm
-                        title="Bạn có chắc chắn muốn xóa khóa học này?"
-                        description={record.studentCount > 0 ? 'Khóa học này đã có học viên, không thể xóa!' : 'Hành động này không thể hoàn tác'}
+                        title={record.studentCount > 0 ? 'Khóa học này đã có học viên, không thể xóa!' : 'Bạn có chắc chắn muốn xóa khóa học này?'}
                         onConfirm={() => handleDelete(record.id)}
                         okText="Có"
                         cancelText="Không"
                     >
                         <Button 
-                            type="primary" 
+                            type="primary"
                             danger 
                             icon={<DeleteOutlined />}
                             disabled={record.studentCount > 0}
@@ -290,7 +287,7 @@ const QuanLyKhoaHoc: React.FC = () => {
 
             <Modal
                 title={editingCourse ? 'Cập nhật khóa học' : 'Thêm khóa học mới'}
-                open={modalVisible}
+                visible={modalVisible}
                 footer={null}
                 onCancel={() => {
                     setModalVisible(false);
